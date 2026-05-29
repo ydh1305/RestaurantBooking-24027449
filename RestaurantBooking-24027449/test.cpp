@@ -7,6 +7,11 @@
 
 using namespace testing;
 
+class MockCustomer : public Customer {
+public:
+	MOCK_METHOD(string, getEmail(), (), (override));
+};
+
 class BookingItem : public Test {
 protected:
 	void SetUp() override {
@@ -15,6 +20,7 @@ protected:
 
 		bookingScheduler.setSmsSender(&testableSmsSender);
 		bookingScheduler.setMailSender(&testableMailSender);
+
 	}
 public:
 	tm getTime(int year, int mon, int day, int hour, int min) {
@@ -31,8 +37,10 @@ public:
 
 	tm NOT_ON_THE_HOUR;
 	tm ON_THE_HOUR;
-	Customer CUSTOMER{ "Fake name", "010-1234-5678" };
-	Customer CUSTOMER_WITH_MAIL{ "Fake Name", "010-1234-5678", "test@test.com" };
+	/*Customer CUSTOMER{ "Fake name", "010-1234-5678" };
+	Customer CUSTOMER_WITH_MAIL{ "Fake Name", "010-1234-5678", "test@test.com" };*/
+	MockCustomer CUSTOMER;
+	MockCustomer CUSTOMER_WITH_MAIL;
 	const int UNDER_CAPACITY = 1;
 	const int CAPACITY_PER_HOUR = 3;
 
