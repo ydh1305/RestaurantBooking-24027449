@@ -6,8 +6,8 @@ using namespace testing;
 class BookingItem : public Test {
 protected:
 	void SetUp() override {
-		notOnTheHour = getTime(2021, 3, 26, 9, 5);
-		onTheHour = getTime(2021, 3, 26, 9, 0);
+		NOT_ON_THE_HOUR = getTime(2021, 3, 26, 9, 5);
+		ON_THE_HOUR = getTime(2021, 3, 26, 9, 0);
 	}
 public:
 	tm getTime(int year, int mon, int day, int hour, int min) {
@@ -16,14 +16,17 @@ public:
 		return result;
 	}
 
-	tm notOnTheHour;
-	tm onTheHour;
-	Customer customer{ "Fake name", "010-1234-5678" };
+	tm NOT_ON_THE_HOUR;
+	tm ON_THE_HOUR;
+	Customer CUSTOMER{ "Fake name", "010-1234-5678" };
+	const int UNDER_CAPACITY = 1;
+	const int CAPACITY_PER_HOUR = 3;
+
+	BookingScheduler bookingScheduler{ CAPACITY_PER_HOUR };
 };
 
 TEST_F(BookingItem, 예약은정시에만가능하다정시가아닌경우예약불가) {
-	Schedule* schedule = new Schedule{ notOnTheHour, 1, customer };
-	BookingScheduler bookingScheduler{ 3 };
+	Schedule* schedule = new Schedule{ NOT_ON_THE_HOUR, UNDER_CAPACITY, CUSTOMER };
 
 	EXPECT_THROW({
 		bookingScheduler.addSchedule(schedule);
@@ -31,8 +34,7 @@ TEST_F(BookingItem, 예약은정시에만가능하다정시가아닌경우예약불가) {
 }
 
 TEST_F(BookingItem, 예약은정시에만가능하다정시인경우예약가능) {
-	Schedule* schedule = new Schedule{ onTheHour, 1, customer };
-	BookingScheduler bookingScheduler{ 3 };
+	Schedule* schedule = new Schedule{ ON_THE_HOUR, UNDER_CAPACITY, CUSTOMER };
 
 	bookingScheduler.addSchedule(schedule);
 
