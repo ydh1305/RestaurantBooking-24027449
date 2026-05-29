@@ -120,7 +120,12 @@ TEST_F(BookingItem, 현재날짜가일요일인경우예약불가예외처리) {
 }
 
 TEST_F(BookingItem, 현재날짜가일요일이아닌경우예약가능) {
+	BookingScheduler* bookingScheduler = new MondayBookingScheduler{ CAPACITY_PER_HOUR };
 
+	Schedule* schedule = new Schedule{ ON_THE_HOUR, UNDER_CAPACITY, CUSTOMER_WITH_MAIL };
+	bookingScheduler->addSchedule(schedule);
+
+	EXPECT_EQ(true, bookingScheduler->hasSchedule(schedule));
 }
 
 int main() {
