@@ -56,7 +56,16 @@ TEST_F(BookingItem, 시간대별인원제한이있다같은시간대에Capacity초과할경우예외발생
 }
 
 TEST_F(BookingItem, 시간대별인원제한이있다같은시간대가다르면Capacity차있어도스케쥴추가성공) {
+	Schedule* schedule = new Schedule{ ON_THE_HOUR, CAPACITY_PER_HOUR, CUSTOMER };
+	bookingScheduler.addSchedule(schedule);
 
+	tm differentHour = ON_THE_HOUR;
+	differentHour.tm_hour += 1;
+	mktime(&differentHour);
+	Schedule* newSchedule = new Schedule{ differentHour, UNDER_CAPACITY, CUSTOMER };
+	bookingScheduler.addSchedule(newSchedule);
+
+	EXPECT_EQ(true, bookingScheduler.hasSchedule(schedule));
 }
 
 TEST_F(BookingItem, 예약완료시SMS는무조건발송) {
